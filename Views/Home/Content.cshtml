@@ -1,0 +1,1185 @@
+@model BigModel;
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0" >
+    <link href="~/css/styling.css" rel="stylesheet" type="text/css" />
+    <title>Insights</title>
+
+    <!-- https://www.askpython.com/python/examples/images-into-cartoons -->
+    <!-- https://www.youtube.com/watch?v=oYRda7UtuhA -->
+</head>
+<body>
+    <section class="header"> 
+
+         <nav class="about-section">
+             <!-- <a href="content.html"><img src="images/logo.jpeg"></a> -->
+             <h2><a href="#" class="logo">Insights</a></h2>
+             <div class="nav-links" id="navLinks">
+                <i class="fa fa-times" onclick="hideMenu()" ></i>
+                 <ul>
+                     
+                     @Html.ActionLink("Home","Index","Home", null, null)
+                     
+                     @Html.ActionLink("Insights","Content","Home", null, null)
+                     @Html.ActionLink("AboutUs","AboutUs","Home", null, null)
+                     
+                 </ul>
+                    </div> 
+                    <i class="fa fa-bars" onclick="showMenu()"></i>
+                  </nav>
+                    <div class="text-box">
+                        <h1>Use this interactive table to find out about fees at different universities</h1>
+                        <p>Use filters to select a university </p>
+                    </div>
+                    
+          
+
+            <form method="post" asp-action=Data>
+
+                <label asp-for="Student.studentName">Student Name</label>
+                <input asp-for="Student.studentName"></input>
+             
+             
+              
+                <label asp-for="Department.departmentName">Department Name</label>
+                <input asp-for="Department.departmentName"></input>
+                
+                <label asp-for="Campus.campusLocation">Campus Location</label>
+                <input asp-for="Campus.campusLocation"></input>
+                <input type="submit" value="Add"></input>
+               
+            </form>
+                
+            
+          
+            
+
+
+         <table class="table">
+            <tr class="table-header">
+            <th>Id</th>
+            <th>University Name</th>
+            <th>State</th>
+            <th>Type</th>
+            <th>Duration</th>
+            <th>In-State Tuition Fee</th>
+            <th>Out-Of-State Tuition Fee</th>
+            <th>Foreign National</th>
+            <th>Percentage</th>
+            </tr>
+            <tbody id="myTab"></tbody>
+            </table>
+   
+   
+   
+   
+    </section>
+
+
+
+
+
+<!-- ------Javascript for toggle  -->
+<script>
+    
+
+
+
+
+var array = [
+
+    
+
+        {
+            "id": "1",
+            "uni_name": "Adventist University of Health Sciences",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "15150",
+            "out_of_state_tuition": "15150",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "2",
+            "uni_name": "Ave Maria University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "20850",
+            "out_of_state_tuition": "20850",
+            "total_enrollment": "1081",
+            "non_us_pop": "26",
+            "Percentages": "2%"
+        },
+        {
+            "id": "3",
+            "uni_name": "Baptist College of Florida",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "12300",
+            "out_of_state_tuition": "12300",
+            "total_enrollment": "486",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        },
+        {
+            "id": "4",
+            "uni_name": "Barry University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "29850",
+            "out_of_state_tuition": "29850",
+            "total_enrollment": "8518",
+            "non_us_pop": "570",
+            "Percentages": "7%"
+        },
+        {
+            "id": "5",
+            "uni_name": "Beacon College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "39016",
+            "out_of_state_tuition": "39016",
+            "total_enrollment": "223",
+            "non_us_pop": "5",
+            "Percentages": "2%"
+        },
+        {
+            "id": "6",
+            "uni_name": "Bethune-Cookman University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "14814",
+            "out_of_state_tuition": "14814",
+            "total_enrollment": "4044",
+            "non_us_pop": "84",
+            "Percentages": "2%"
+        },
+        {
+            "id": "7",
+            "uni_name": "Broward College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3540",
+            "out_of_state_tuition": "11190",
+            "total_enrollment": "44119",
+            "non_us_pop": "1360",
+            "Percentages": "3%"
+        },
+        {
+            "id": "8",
+            "uni_name": "Carlos Albizu University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "10234",
+            "out_of_state_tuition": "10234",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "9",
+            "uni_name": "Chipola College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3160",
+            "out_of_state_tuition": "8990",
+            "total_enrollment": "2080",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        },
+        {
+            "id": "10",
+            "uni_name": "College of Business and Technology: Flagler",
+            "state": "Florida",
+            "type": "For Profit",
+            "degree_length": "2 Year",
+            "in_state_tuition": "12222",
+            "out_of_state_tuition": "12222",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "11",
+            "uni_name": "College of Business and Technology: Hialeah",
+            "state": "Florida",
+            "type": "For Profit",
+            "degree_length": "2 Year",
+            "in_state_tuition": "12222",
+            "out_of_state_tuition": "12222",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "12",
+            "uni_name": "College of Business and Technology: Miami Gardens",
+            "state": "Florida",
+            "type": "For Profit",
+            "degree_length": "2 Year",
+            "in_state_tuition": "12222",
+            "out_of_state_tuition": "12222",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "13",
+            "uni_name": "College of Central Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3213",
+            "out_of_state_tuition": "12656",
+            "total_enrollment": "7931",
+            "non_us_pop": "95",
+            "Percentages": "1%"
+        },
+        {
+            "id": "14",
+            "uni_name": "Daytona State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3109",
+            "out_of_state_tuition": "11998",
+            "total_enrollment": "13248",
+            "non_us_pop": "35",
+            "Percentages": "0%"
+        },
+        {
+            "id": "15",
+            "uni_name": "Eastern Florida State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3140",
+            "out_of_state_tuition": "12193",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "16",
+            "uni_name": "Eckerd College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "44540",
+            "out_of_state_tuition": "44540",
+            "total_enrollment": "2083",
+            "non_us_pop": "89",
+            "Percentages": "4%"
+        },
+        {
+            "id": "17",
+            "uni_name": "Edward Waters College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "13725",
+            "out_of_state_tuition": "13725",
+            "total_enrollment": "929",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        },
+        {
+            "id": "18",
+            "uni_name": "Embry-Riddle Aeronautical University: Daytona Beach Campus",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "35814",
+            "out_of_state_tuition": "35814",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "19",
+            "uni_name": "Embry-Riddle Aeronautical University: Worldwide Campus",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "9360",
+            "out_of_state_tuition": "9360",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "20",
+            "uni_name": "Everglades University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "17145",
+            "out_of_state_tuition": "17145",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "21",
+            "uni_name": "Flagler College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "18950",
+            "out_of_state_tuition": "18950",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "22",
+            "uni_name": "Florida Agricultural and Mechanical University",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "5827",
+            "out_of_state_tuition": "17768",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "23",
+            "uni_name": "Florida Atlantic University",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6039",
+            "out_of_state_tuition": "21595",
+            "total_enrollment": "30297",
+            "non_us_pop": "738",
+            "Percentages": "2%"
+        },
+        {
+            "id": "24",
+            "uni_name": "Florida College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "17142",
+            "out_of_state_tuition": "17142",
+            "total_enrollment": "555",
+            "non_us_pop": "9",
+            "Percentages": "2%"
+        },
+        {
+            "id": "25",
+            "uni_name": "Florida Gateway College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3100",
+            "out_of_state_tuition": "11747",
+            "total_enrollment": "2912",
+            "non_us_pop": "4",
+            "Percentages": "0%"
+        },
+        {
+            "id": "26",
+            "uni_name": "Florida Gulf Coast University",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6118",
+            "out_of_state_tuition": "25162",
+            "total_enrollment": "14473",
+            "non_us_pop": "231",
+            "Percentages": "2%"
+        },
+        {
+            "id": "27",
+            "uni_name": "Florida Institute of Technology",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "41850",
+            "out_of_state_tuition": "41850",
+            "total_enrollment": "6393",
+            "non_us_pop": "2244",
+            "Percentages": "35%"
+        },
+        {
+            "id": "28",
+            "uni_name": "Florida International University",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6558",
+            "out_of_state_tuition": "18956",
+            "total_enrollment": "49610",
+            "non_us_pop": "3619",
+            "Percentages": "7%"
+        },
+        {
+            "id": "29",
+            "uni_name": "Florida Keys Community College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3277",
+            "out_of_state_tuition": "13162",
+            "total_enrollment": "1033",
+            "non_us_pop": "3",
+            "Percentages": "0%"
+        },
+        {
+            "id": "30",
+            "uni_name": "Florida Memorial University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "15536",
+            "out_of_state_tuition": "15536",
+            "total_enrollment": "1528",
+            "non_us_pop": "192",
+            "Percentages": "13%"
+        },
+        {
+            "id": "31",
+            "uni_name": "Florida National University",
+            "state": "Florida",
+            "type": "For Profit",
+            "degree_length": "2 Year",
+            "in_state_tuition": "13800",
+            "out_of_state_tuition": "13800",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "32",
+            "uni_name": "Florida Southern College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "36348",
+            "out_of_state_tuition": "36348",
+            "total_enrollment": "2670",
+            "non_us_pop": "130",
+            "Percentages": "5%"
+        },
+        {
+            "id": "33",
+            "uni_name": "Florida SouthWestern State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3401",
+            "out_of_state_tuition": "13944",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "34",
+            "uni_name": "Florida State College at Jacksonville",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3146",
+            "out_of_state_tuition": "12038",
+            "total_enrollment": "25514",
+            "non_us_pop": "213",
+            "Percentages": "1%"
+        },
+        {
+            "id": "35",
+            "uni_name": "Florida State University",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6516",
+            "out_of_state_tuition": "21683",
+            "total_enrollment": "41226",
+            "non_us_pop": "1875",
+            "Percentages": "5%"
+        },
+        {
+            "id": "36",
+            "uni_name": "Gulf Coast State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "2963",
+            "out_of_state_tuition": "10791",
+            "total_enrollment": "5926",
+            "non_us_pop": "11",
+            "Percentages": "0%"
+        },
+        {
+            "id": "37",
+            "uni_name": "Hillsborough Community College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3132",
+            "out_of_state_tuition": "11388",
+            "total_enrollment": "27298",
+            "non_us_pop": "824",
+            "Percentages": "3%"
+        },
+        {
+            "id": "38",
+            "uni_name": "Hobe Sound Bible College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6490",
+            "out_of_state_tuition": "6490",
+            "total_enrollment": "251",
+            "non_us_pop": "4",
+            "Percentages": "2%"
+        },
+        {
+            "id": "39",
+            "uni_name": "Hodges University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "17600",
+            "out_of_state_tuition": "17600",
+            "total_enrollment": "1892",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        },
+        {
+            "id": "40",
+            "uni_name": "Indian River State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3115",
+            "out_of_state_tuition": "11715",
+            "total_enrollment": "17665",
+            "non_us_pop": "215",
+            "Percentages": "1%"
+        },
+        {
+            "id": "41",
+            "uni_name": "Jacksonville University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "36670",
+            "out_of_state_tuition": "36670",
+            "total_enrollment": "4085",
+            "non_us_pop": "132",
+            "Percentages": "3%"
+        },
+        {
+            "id": "42",
+            "uni_name": "Johnson & Wales University: North Miami",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "32091",
+            "out_of_state_tuition": "32091",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "43",
+            "uni_name": "Johnson University: Florida",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "16060",
+            "out_of_state_tuition": "16060",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "44",
+            "uni_name": "Keiser University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "29920",
+            "out_of_state_tuition": "29920",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "45",
+            "uni_name": "Key College",
+            "state": "Florida",
+            "type": "For Profit",
+            "degree_length": "2 Year",
+            "in_state_tuition": "11085",
+            "out_of_state_tuition": "11085",
+            "total_enrollment": "59",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        },
+        {
+            "id": "46",
+            "uni_name": "Lake-Sumter State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3172",
+            "out_of_state_tuition": "13276",
+            "total_enrollment": "4470",
+            "non_us_pop": "27",
+            "Percentages": "1%"
+        },
+        {
+            "id": "47",
+            "uni_name": "Lynn University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "38210",
+            "out_of_state_tuition": "38210",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "48",
+            "uni_name": "Miami Dade College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3547",
+            "out_of_state_tuition": "12075",
+            "total_enrollment": "66046",
+            "non_us_pop": "3388",
+            "Percentages": "5%"
+        },
+        {
+            "id": "49",
+            "uni_name": "New College of Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6919",
+            "out_of_state_tuition": "29944",
+            "total_enrollment": "834",
+            "non_us_pop": "15",
+            "Percentages": "2%"
+        },
+        {
+            "id": "50",
+            "uni_name": "North Florida Community College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3179",
+            "out_of_state_tuition": "12095",
+            "total_enrollment": "1289",
+            "non_us_pop": "5",
+            "Percentages": "0%"
+        },
+        {
+            "id": "51",
+            "uni_name": "Northwest Florida State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3324",
+            "out_of_state_tuition": "11634",
+            "total_enrollment": "6295",
+            "non_us_pop": "34",
+            "Percentages": "1%"
+        },
+        {
+            "id": "52",
+            "uni_name": "Nova Southeastern University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "30900",
+            "out_of_state_tuition": "30900",
+            "total_enrollment": "24148",
+            "non_us_pop": "969",
+            "Percentages": "4%"
+        },
+        {
+            "id": "53",
+            "uni_name": "Palm Beach Atlantic University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "31450",
+            "out_of_state_tuition": "31450",
+            "total_enrollment": "3865",
+            "non_us_pop": "138",
+            "Percentages": "4%"
+        },
+        {
+            "id": "54",
+            "uni_name": "Palm Beach State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3030",
+            "out_of_state_tuition": "10890",
+            "total_enrollment": "28517",
+            "non_us_pop": "503",
+            "Percentages": "2%"
+        },
+        {
+            "id": "55",
+            "uni_name": "Pasco-Hernando State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3155",
+            "out_of_state_tuition": "12032",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "56",
+            "uni_name": "Pensacola State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3137",
+            "out_of_state_tuition": "12593",
+            "total_enrollment": "10317",
+            "non_us_pop": "34",
+            "Percentages": "0%"
+        },
+        {
+            "id": "57",
+            "uni_name": "Polk State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3367",
+            "out_of_state_tuition": "12272",
+            "total_enrollment": "11060",
+            "non_us_pop": "89",
+            "Percentages": "1%"
+        },
+        {
+            "id": "58",
+            "uni_name": "Ringling College of Art and Design",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "46420",
+            "out_of_state_tuition": "46420",
+            "total_enrollment": "1219",
+            "non_us_pop": "192",
+            "Percentages": "16%"
+        },
+        {
+            "id": "59",
+            "uni_name": "Rollins College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "49760",
+            "out_of_state_tuition": "49760",
+            "total_enrollment": "3207",
+            "non_us_pop": "222",
+            "Percentages": "7%"
+        },
+        {
+            "id": "60",
+            "uni_name": "Saint Johns River State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3240",
+            "out_of_state_tuition": "11608",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "61",
+            "uni_name": "Saint Leo University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "22280",
+            "out_of_state_tuition": "22280",
+            "total_enrollment": "16349",
+            "non_us_pop": "365",
+            "Percentages": "2%"
+        },
+        {
+            "id": "62",
+            "uni_name": "Saint Thomas University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "33222",
+            "out_of_state_tuition": "33222",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "63",
+            "uni_name": "Santa Fe College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3203",
+            "out_of_state_tuition": "11487",
+            "total_enrollment": "15055",
+            "non_us_pop": "268",
+            "Percentages": "2%"
+        },
+        {
+            "id": "64",
+            "uni_name": "Schiller International University",
+            "state": "Florida",
+            "type": "For Profit",
+            "degree_length": "4 Year",
+            "in_state_tuition": "17700",
+            "out_of_state_tuition": "17700",
+            "total_enrollment": "50",
+            "non_us_pop": "9",
+            "Percentages": "18%"
+        },
+        {
+            "id": "65",
+            "uni_name": "Seminole State College of Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3131",
+            "out_of_state_tuition": "11456",
+            "total_enrollment": "18399",
+            "non_us_pop": "326",
+            "Percentages": "2%"
+        },
+        {
+            "id": "66",
+            "uni_name": "South Florida State College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3136",
+            "out_of_state_tuition": "11829",
+            "total_enrollment": "2780",
+            "non_us_pop": "45",
+            "Percentages": "2%"
+        },
+        {
+            "id": "67",
+            "uni_name": "Southeastern University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "25360",
+            "out_of_state_tuition": "25360",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "68",
+            "uni_name": "St. John Vianney College Seminary",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "21000",
+            "out_of_state_tuition": "21000",
+            "total_enrollment": "108",
+            "non_us_pop": "13",
+            "Percentages": "12%"
+        },
+        {
+            "id": "69",
+            "uni_name": "St. Petersburg College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3443",
+            "out_of_state_tuition": "11697",
+            "total_enrollment": "32681",
+            "non_us_pop": "232",
+            "Percentages": "1%"
+        },
+        {
+            "id": "70",
+            "uni_name": "State College of Florida, Manatee-Sarasota",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3074",
+            "out_of_state_tuition": "11596",
+            "total_enrollment": "10314",
+            "non_us_pop": "150",
+            "Percentages": "1%"
+        },
+        {
+            "id": "71",
+            "uni_name": "Stetson University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "46030",
+            "out_of_state_tuition": "46030",
+            "total_enrollment": "4137",
+            "non_us_pop": "211",
+            "Percentages": "5%"
+        },
+        {
+            "id": "72",
+            "uni_name": "Tallahassee Community College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3030",
+            "out_of_state_tuition": "11460",
+            "total_enrollment": "13049",
+            "non_us_pop": "141",
+            "Percentages": "1%"
+        },
+        {
+            "id": "73",
+            "uni_name": "Talmudic University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "13250",
+            "out_of_state_tuition": "13250",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "74",
+            "uni_name": "Trinity Baptist College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "12140",
+            "out_of_state_tuition": "12140",
+            "total_enrollment": "389",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        },
+        {
+            "id": "75",
+            "uni_name": "Trinity College of Florida",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "16340",
+            "out_of_state_tuition": "16340",
+            "total_enrollment": "229",
+            "non_us_pop": "5",
+            "Percentages": "2%"
+        },
+        {
+            "id": "76",
+            "uni_name": "University of Central Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6368",
+            "out_of_state_tuition": "22467",
+            "total_enrollment": "60767",
+            "non_us_pop": "1515",
+            "Percentages": "2%"
+        },
+        {
+            "id": "77",
+            "uni_name": "University of Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6381",
+            "out_of_state_tuition": "28658",
+            "total_enrollment": "49459",
+            "non_us_pop": "4295",
+            "Percentages": "9%"
+        },
+        {
+            "id": "78",
+            "uni_name": "University of Miami",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "50226",
+            "out_of_state_tuition": "50226",
+            "total_enrollment": "16674",
+            "non_us_pop": "2744",
+            "Percentages": "16%"
+        },
+        {
+            "id": "79",
+            "uni_name": "University of North Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6394",
+            "out_of_state_tuition": "20112",
+            "total_enrollment": "15984",
+            "non_us_pop": "370",
+            "Percentages": "2%"
+        },
+        {
+            "id": "80",
+            "uni_name": "University of South Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6410",
+            "out_of_state_tuition": "17324",
+            "total_enrollment": "41938",
+            "non_us_pop": "3242",
+            "Percentages": "8%"
+        },
+        {
+            "id": "81",
+            "uni_name": "University of South Florida: Saint Petersburg",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "5821",
+            "out_of_state_tuition": "16735",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "82",
+            "uni_name": "University of South Florida: Sarasota-Manatee",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "5587",
+            "out_of_state_tuition": "16502",
+            "total_enrollment": "-",
+            "non_us_pop": "-",
+            "Percentages": "-"
+        },
+        {
+            "id": "83",
+            "uni_name": "University of Tampa",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "29208",
+            "out_of_state_tuition": "29208",
+            "total_enrollment": "7683",
+            "non_us_pop": "923",
+            "Percentages": "12%"
+        },
+        {
+            "id": "84",
+            "uni_name": "University of West Florida",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "4 Year",
+            "in_state_tuition": "6360",
+            "out_of_state_tuition": "18628",
+            "total_enrollment": "12602",
+            "non_us_pop": "375",
+            "Percentages": "3%"
+        },
+        {
+            "id": "85",
+            "uni_name": "Valencia College",
+            "state": "Florida",
+            "type": "Public",
+            "degree_length": "2 Year",
+            "in_state_tuition": "3366",
+            "out_of_state_tuition": "12828",
+            "total_enrollment": "43217",
+            "non_us_pop": "871",
+            "Percentages": "2%"
+        },
+        {
+            "id": "86",
+            "uni_name": "Warner University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "21840",
+            "out_of_state_tuition": "21840",
+            "total_enrollment": "1161",
+            "non_us_pop": "21",
+            "Percentages": "2%"
+        },
+        {
+            "id": "87",
+            "uni_name": "Webber International University",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "26116",
+            "out_of_state_tuition": "26116",
+            "total_enrollment": "732",
+            "non_us_pop": "182",
+            "Percentages": "25%"
+        },
+        {
+            "id": "88",
+            "uni_name": "Yeshiva Gedolah Rabbinical College",
+            "state": "Florida",
+            "type": "Private",
+            "degree_length": "4 Year",
+            "in_state_tuition": "8300",
+            "out_of_state_tuition": "8300",
+            "total_enrollment": "52",
+            "non_us_pop": "0",
+            "Percentages": "0%"
+        }
+    ]
+
+    
+
+
+buildTable(array);
+
+function buildTable(data){
+ var t = document.getElementById('myTab')
+for(var i=0; i<data.length; i++)
+{
+    var row = `<tr>
+        <td>${data[i].id}</td>
+        <td>${data[i].uni_name}</td>
+        <td>${data[i].state}</td>
+        <td>${data[i].type}</td>
+        <td>${data[i].degree_length}</td>
+        <td>${data[i].in_state_tuition}</td>
+        <td>${data[i].out_of_state_tuition}</td>
+        <td>${data[i].non_us_pop}</td>
+        <td>${data[i].Percentages}</td>
+        </tr>`
+    t.innerHTML +=row
+}
+
+
+}
+</script>
+
+
+</body>
+</html>
